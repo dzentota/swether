@@ -1,18 +1,22 @@
-pragma solidity ^0.4.21;
+pragma solidity 0.4.21;
 
 
-import "./Multiownable.sol";
+import "./Validatable.sol";
 
 /**
  * @title Pausable
  * @dev Base contract which allows children to implement an emergency stop mechanism.
  */
-contract Pausable is Multiownable {
+contract Pausable is Validatable {
     event Pause();
     event Unpause();
 
+    event ChannelPaused(address indexed channel);
+    event ChannelUnpaused(address indexed channel);
+
     bool public paused = false;
 
+    mapping (address => bool) public pausedChannels;
 
     /**
      * @dev Modifier to make a function callable only when the contract is not paused.
@@ -30,6 +34,16 @@ contract Pausable is Multiownable {
         _;
     }
 
+    modifier whenChannelPaused(address _channel) {
+        require(pausedChannels[_channel]);
+        _;
+    }
+
+    modifier whenChannelNotPaused(address _channel) {
+        require(!pausedChannels[_channel]);
+        _;
+    }
+
     /**
      * @dev called by the owner to pause, triggers stopped state
      */
@@ -44,5 +58,15 @@ contract Pausable is Multiownable {
     function unpause() onlyManyOwners whenPaused public {
         paused = false;
         emit Unpause();
+    }
+
+    function pauseChannel(address _channel) onlyManyValidators whenChannelNotPaused(_channel) whenNotPaused public {
+        pausedChannels[channel] = true;
+        emit ChannelPaused(_channel);
+    }
+
+    function unpauseChannel(address _channel) onlyManyValidators whenChannelPaused(_channel) whenNotPaused public {
+        pausedChannels[channel] = false;
+        emit ChannelUnpaused(_channel);
     }
 }
