@@ -59,8 +59,8 @@ contract Swether is Pausable {
         contribute();
     }
 
-    function withdraw(string _id, uint256 _value, address _channel, bytes _messageSignature) external noReentrancy whenChannelNotPaused(_channel) whenNotPaused {
-        require(checkVoucher(_id, _value, _channel, _messageSignature));
+    function withdraw(string _id, uint256 _value, address _channel, uint8 v, bytes32 r, bytes32 s) external noReentrancy whenChannelNotPaused(_channel) whenNotPaused {
+        require(checkVoucher(_id, _value, _channel, v, r, s));
         require(channels[_channel] >= _value);
         bytes32 key = getKey(_id);
         require(challengePeriods[key] >= block.number);
@@ -70,8 +70,8 @@ contract Swether is Pausable {
         msg.sender.transfer(_value);
     }
 
-    function claimExchange(string _id, uint256 _value, address _channel, bytes _messageSignature) external noReentrancy whenChannelNotPaused(_channel) whenNotPaused{
-        require(checkVoucher(_id, _value, _channel, _messageSignature));
+    function claimExchange(string _id, uint256 _value, address _channel, uint8 v, bytes32 r, bytes32 s) external noReentrancy whenChannelNotPaused(_channel) whenNotPaused{
+        require(checkVoucher(_id, _value, _channel, v, r, s));
         require(channels[_channel] >= _value);
         bytes32 key = getKey(_id);
         uint256 challengePeriod = block.number.add(blocksToWait(_value));
@@ -82,10 +82,10 @@ contract Swether is Pausable {
         return channels[owner];
     }
 
-    function checkVoucher(string _id, uint256 _value, address _channel, bytes _messageSignature) private view returns(bool)
+    function checkVoucher(string _id, uint256 _value, address _channel, uint8 v, bytes32 r, bytes32 s) private view returns(bool)
     {
         require(!isVoucherUsed(_id));
-        bytes32 message_hash = keccak256(
+        bytes32 msgHash = keccak256(
             keccak256(
             'string voucher_id',
             'uint value',
@@ -98,7 +98,7 @@ contract Swether is Pausable {
             )
         );
         // Derive address from signature
-        address signer = ECVerify.ecverify(message_hash, _messageSignature);
+        address signer = ecrecover(msgHash, v, r, s);//ECVerify.ecverify(message_hash, _messageSignature);
         return signerAddress == signer;
     }
 
