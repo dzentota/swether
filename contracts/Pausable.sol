@@ -1,4 +1,4 @@
-pragma solidity 0.4.21;
+pragma solidity 0.4.18;
 
 
 import "./Validatable.sol";
@@ -49,7 +49,7 @@ contract Pausable is Validatable {
      */
     function pause() onlyManyOwners whenNotPaused public {
         paused = true;
-        emit Pause();
+        Pause();
     }
 
     /**
@@ -57,16 +57,16 @@ contract Pausable is Validatable {
      */
     function unpause() onlyManyOwners whenPaused public {
         paused = false;
-        emit Unpause();
+        Unpause();
     }
 
     function pauseChannel(address _channel) onlyManyValidators whenChannelNotPaused(_channel) whenNotPaused public {
-        pausedChannels[channel] = true;
-        emit ChannelPaused(_channel);
+        pausedChannels[_channel] = true;
+        ChannelPaused(_channel);
     }
 
     function unpauseChannel(address _channel) onlyManyValidators whenChannelPaused(_channel) whenNotPaused public {
-        pausedChannels[channel] = false;
-        emit ChannelUnpaused(_channel);
+        pausedChannels[_channel] = false;
+        ChannelUnpaused(_channel);
     }
 }

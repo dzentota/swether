@@ -1,4 +1,4 @@
-pragma solidity 0.4.21;
+pragma solidity 0.4.18;
 
 
 contract Multiownable {
@@ -143,7 +143,7 @@ contract Multiownable {
             require(newOwners[i] != address(0));
         }
 
-        emit OwnershipTransferred(owners, newOwners);
+        OwnershipTransferred(owners, newOwners);
 
         // Reset owners array and index reverse lookup table
         for (i = 0; i < owners.length; i++) {

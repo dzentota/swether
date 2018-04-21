@@ -1,8 +1,9 @@
-pragma solidity 0.4.21;
+pragma solidity 0.4.18;
 
 import "./Pausable.sol";
 import "./Util.sol";
 import "./ECVerify.sol";
+import "./SafeMath.sol";
 
 contract Swether is Pausable {
 
@@ -35,11 +36,11 @@ contract Swether is Pausable {
         signerAddress = _signerAddress;
     }
 
-    function contribute() external payable {
+    function contribute() public payable {
         channels[msg.sender] = msg.value;
     }
 
-    uint8 fee public;
+    uint8 public fee;
 
     function setFee(uint8 _fee) external onlyManyOwners {
         require(_fee <= MAX_FEE);
@@ -58,8 +59,8 @@ contract Swether is Pausable {
         contribute();
     }
 
-    function withdraw(string _id, uint256 _value, address _channel, bytes _msg_sig) external noReentrancy whenChannelNotPaused(_channel) whenNotPaused {
-        require(checkVoucher(_id, _value, _msg_sig));
+    function withdraw(string _id, uint256 _value, address _channel, bytes _messageSignature) external noReentrancy whenChannelNotPaused(_channel) whenNotPaused {
+        require(checkVoucher(_id, _value, _channel, _messageSignature));
         require(channels[_channel] >= _value);
         bytes32 key = getKey(_id);
         require(challengePeriods[key] >= block.number);
@@ -69,8 +70,8 @@ contract Swether is Pausable {
         msg.sender.transfer(_value);
     }
 
-    function claimExchange(string _id, uint256 _value, address _channel, bytes _msg_sig) external noReentrancy whenChannelNotPaused(_channel) whenNotPaused{
-        require(checkVoucher(_id, _value, _channel, _msg_sig));
+    function claimExchange(string _id, uint256 _value, address _channel, bytes _messageSignature) external noReentrancy whenChannelNotPaused(_channel) whenNotPaused{
+        require(checkVoucher(_id, _value, _channel, _messageSignature));
         require(channels[_channel] >= _value);
         bytes32 key = getKey(_id);
         uint256 challengePeriod = block.number.add(blocksToWait(_value));
@@ -81,14 +82,14 @@ contract Swether is Pausable {
         return channels[owner];
     }
 
-    function checkVoucher(string _id, uint256 _value, _address _channel, bytes _msg_sig) private returns(bool)
+    function checkVoucher(string _id, uint256 _value, address _channel, bytes _messageSignature) private view returns(bool)
     {
         require(!isVoucherUsed(_id));
         bytes32 message_hash = keccak256(
             keccak256(
             'string voucher_id',
-            'uint value'
-            'address channel',
+            'uint value',
+            'address channel'
             ),
             keccak256(
             _id,
@@ -97,9 +98,8 @@ contract Swether is Pausable {
             )
         );
         // Derive address from signature
-        address signer = ECVerify.ecverify(message_hash, _msg_sig);
+        address signer = ECVerify.ecverify(message_hash, _messageSignature);
         return signerAddress == signer;
-//        return true;
     }
 
     function getKey(string _id) public pure returns (bytes32 data)
@@ -109,10 +109,13 @@ contract Swether is Pausable {
 
     function isVoucherUsed(string _id) public view returns (bool) {
         bytes32 key = getKey(_id);
-        return usedVouchers[key];
+        return usedVouchers[key] != 0;
     }
 
-    function blocksToWait(uint256 _value) internal pure {
+    function blocksToWait(uint256 _value) internal pure returns(uint8){
+        if (_value >= 1 ether) {
+            return 5;
+        }
         return 2;
     }
 

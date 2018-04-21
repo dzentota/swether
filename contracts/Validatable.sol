@@ -1,9 +1,9 @@
-pragma solidity 0.4.21;
+pragma solidity 0.4.18;
 
 import "./Multiownable.sol";
 
 
-contract Validatable is MultiOwnable {
+contract Validatable is Multiownable {
 
     uint256 public validatorsGeneration;
     uint256 public howManyValidatorsDecide;
@@ -43,7 +43,7 @@ contract Validatable is MultiOwnable {
     * @dev Allows to perform method by any of the validators
     */
     modifier onlyAnyValidator {
-        require(isOwner(msg.sender));
+        require(isValidator(msg.sender));
         _;
     }
 
@@ -79,8 +79,8 @@ contract Validatable is MultiOwnable {
 
     // CONSTRUCTOR
 
-    function Validatable(address[] validators) public {
-        transferValidatorRights(validators);
+    function Validatable(address[] _validators) public {
+        transferValidatorRights(_validators);
     }
 
     // INTERNAL METHODS
@@ -115,18 +115,18 @@ contract Validatable is MultiOwnable {
     /**
     * @dev Allows owners to change validators
     * @param newValidators defines array of addresses of new validators
-    * @param newHowManyOwnersDecide defines how many validators can decide
+    * @param newHowManyValidatorsDecide defines how many validators can decide
     */
     function transferValidatorRightsWithHowMany(address[] newValidators, uint256 newHowManyValidatorsDecide) public onlyManyOwners {
         require(newValidators.length > 0);
         require(newValidators.length <= 256);
         require(newHowManyValidatorsDecide > 0);
         require(newHowManyValidatorsDecide <= newValidators.length);
-        for (uint i = 0; i < newOwners.length; i++) {
+        for (uint i = 0; i < newValidators.length; i++) {
             require(newValidators[i] != address(0));
         }
 
-        emit ValidatorRightsTransferred(validators, newValidators);
+        ValidatorRightsTransferred(validators, newValidators);
 
         // Reset validators array and index reverse lookup table
         for (i = 0; i < validators.length; i++) {
