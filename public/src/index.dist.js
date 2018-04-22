@@ -7,7 +7,7 @@ socket.on('news', function (data) {
 });
 socket.on('transaction', function (data) {
     console.log(data);
-})
+});
 var myAddress = localStorage.getItem('swether_address');
 if (myAddress == null) {
     let myIdentity = createNewIdentity();
@@ -20,7 +20,13 @@ if (myAddress == null) {
     console.log("address already exixsts", myAddress);
 }
 document.getElementById('wallet').innerHTML = myAddress;
-socket.emit('balance', myAddress, function (answer) {});
+socket.emit('balance_request', myAddress);
+socket.on('balance_update',function (data) {
+    console.log(data);
+    if (data.address == myAddress) {
+        document.getElementById('balance').innerHTML = data.balance;
+    }
+});
 
 function createNewIdentity()
 {

@@ -19,7 +19,9 @@ function handler (req, res) {
 
 io.on('connection', function (socket) {
     socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        console.log(data);
+    socket.on('balance_request', function (data) {
+
+        console.log(data, 1234567);
+        socket.emit('balance_update', { address: data, balance:1234567 });
     });
 });
