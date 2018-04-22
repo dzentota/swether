@@ -2,10 +2,10 @@ pragma solidity 0.4.18;
 
 import "./Pausable.sol";
 import "./Util.sol";
-import "./ECVerify.sol";
 import "./SafeMath.sol";
+import "./Verifiable.sol";
 
-contract Swether is Pausable {
+contract Swether is Pausable, Verifiable {
 
     uint8 constant public MAX_FEE = 20;
 
@@ -14,6 +14,7 @@ contract Swether is Pausable {
     mapping (address => uint256) internal channels;
 
     mapping (bytes32 => address) internal usedVouchers;
+    mapping (bytes32 => address) internal claimedVouchers;
 
     address public signerAddress;
 
@@ -63,7 +64,8 @@ contract Swether is Pausable {
         require(checkVoucher(_id, _value, _channel, v, r, s));
         require(channels[_channel] >= _value);
         bytes32 key = getKey(_id);
-        require(challengePeriods[key] >= block.number);
+        require(claimedVouchers[key] == msg.sender);
+        require(challengePeriods[key] <= block.number);
         usedVouchers[key] = msg.sender;
 
         channels[_channel] = channels[_channel].sub(_value);
@@ -76,6 +78,7 @@ contract Swether is Pausable {
         bytes32 key = getKey(_id);
         uint256 challengePeriod = block.number.add(blocksToWait(_value));
         challengePeriods[key] = challengePeriod;
+        claimedVouchers[key] = msg.sender;
     }
 
     function getBalance(address owner) external view returns (uint256) {
@@ -85,21 +88,7 @@ contract Swether is Pausable {
     function checkVoucher(string _id, uint256 _value, address _channel, uint8 v, bytes32 r, bytes32 s) private view returns(bool)
     {
         require(!isVoucherUsed(_id));
-        bytes32 msgHash = keccak256(
-            keccak256(
-            'string voucher_id',
-            'uint value',
-            'address channel'
-            ),
-            keccak256(
-            _id,
-            _value,
-            _channel
-            )
-        );
-        // Derive address from signature
-        address signer = ecrecover(msgHash, v, r, s);//ECVerify.ecverify(message_hash, _messageSignature);
-        return signerAddress == signer;
+        return isVoucherSigner(signerAddress, _id, _value, _channel, v, r, s);
     }
 
     function getKey(string _id) public pure returns (bytes32 data)
@@ -114,9 +103,9 @@ contract Swether is Pausable {
 
     function blocksToWait(uint256 _value) internal pure returns(uint8){
         if (_value >= 1 ether) {
-            return 5;
+            return 2;
         }
-        return 2;
+        return 0;
     }
 
 }

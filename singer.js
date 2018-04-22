@@ -4,7 +4,7 @@ const Web3 = require('web3')
 const provider = new Web3.providers.HttpProvider('http://localhost:9545')
 const web3 = new Web3(provider)
 
-const VerifierArtifact = require('./build/contracts/Verifier')
+const VerifierArtifact = require('./build/contracts/Verifiable')
 const Verifier = contract(VerifierArtifact)
 Verifier.setProvider(provider)
 
@@ -18,13 +18,18 @@ Verifier
         const signHash = EthCrypto.hash.keccak256([
             { // prefix
                 type: 'string',
-                value: 'Signed for DonationBag:'
-            }, { // contractAddress
+                value: 'Signed for Swether:'
+            },
+            { // id
+                type: 'string',
+                value: '123-24444-232-33'
+            },
+            { // amount
+                type: 'uint256',
+                value: '10000000000000000'
+            }, { // channel
                 type: 'address',
-                value: instance.address
-            }, { // receiverAddress
-                type: 'address',
-                value: recieverIdentity.address
+                value: '0x627306090abab3a6e1400e9345bc60c78a8bef57'
             }
         ]);
 
@@ -37,8 +42,10 @@ Verifier
 
         console.log(vrs);
 
-        return instance.getSigner.call(
-            recieverIdentity.address,
+        return instance.getVoucherSigner.call(
+            '123-24444-232-33',
+            '10000000000000000',
+            '0x627306090abab3a6e1400e9345bc60c78a8bef57',
             vrs.v,
             vrs.r,
             vrs.s

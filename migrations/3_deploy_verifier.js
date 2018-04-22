@@ -1,5 +1,5 @@
-var Verifier = artifacts.require("./Verifier.sol");
+var Verifiable = artifacts.require("./Verifiable.sol");
 
 module.exports = function(deployer) {
-    deployer.deploy(Verifier);
+    deployer.deploy(Verifiable);
 };
