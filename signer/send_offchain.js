@@ -8,6 +8,8 @@ const Web3 = require('web3')
 const provider = new Web3.providers.HttpProvider('http://localhost:9545')
 const web3 = new Web3(provider)
 const uuidv4 = require('uuid/v4');
+const fs = require('fs');
+const path = require('path');
 
 require('dotenv').config();
 const private_key = process.env["SERVER_PRIVATE_KEY"];
@@ -63,7 +65,25 @@ decryptWithPrivateKey(private_key, encryptedObject)
         );
 
         let dirPrefix = voucherId.split('-').join('/');
-        console.log(dirPrefix);
+        newVoucher.signature = signature;
+        // path.join(__dirname, 'vouchers', dirPrefix)
+        const fullPath = path.join(__dirname, 'vouchers', dirPrefix);
+        var shell = require('shelljs');
+        shell.mkdir('-p', fullPath);
+        fs.writeFileSync(path.join(fullPath, voucherId), JSON.stringify(newVoucher));
+
+        if (shell.exec('git add ."').code !== 0) {
+            shell.echo('Error: Git "add" failed');
+            shell.exit(1);
+        }
+        if (shell.exec('git commit -m "commit new voucher"').code !== 0) {
+            shell.echo('Error: Git commit failed');
+            shell.exit(1);
+        }
+        if (shell.exec('git push origin HEAD').code !== 0) {
+            shell.echo('Error: Git push failed');
+            shell.exit(1);
+        }
     });
 
 
