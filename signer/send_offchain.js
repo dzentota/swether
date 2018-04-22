@@ -72,7 +72,7 @@ decryptWithPrivateKey(private_key, encryptedObject)
         shell.mkdir('-p', fullPath);
         fs.writeFileSync(path.join(fullPath, voucherId), JSON.stringify(newVoucher));
 
-        if (shell.exec('git add ."').code !== 0) {
+        if (shell.exec('git add .').code !== 0) {
             shell.echo('Error: Git "add" failed');
             shell.exit(1);
         }
