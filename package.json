@@ -4,6 +4,10 @@
   "description": "Swift off-chain payments",
   "author": "Alex Tatulchenkov",
   "license": "MIT",
+  "scripts": {
+    "build-client": "webpack  --config webpack.config.js",
+    "build": "npm run build-client"
+  },
   "dependencies": {
     "babel-eslint": "^8.0.1",
     "bip39": "^2.4.0",

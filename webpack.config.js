@@ -2,15 +2,15 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: ['babel-polyfill', './app/javascripts/app.js'],
+    entry: ['babel-polyfill', './public/src/index.dist.js'],
     output: {
-        path: path.resolve(__dirname, '../web/js'),
-        filename: 'app.js'
+        path: path.resolve(__dirname, './public/js'),
+        filename: 'index.js'
     },
     plugins: [
         // Copy our app's index.html to the build folder.
         new CopyWebpackPlugin([
-            {from: './app/javascripts'}
+            {from: './public/src'}
         ])
     ],
     module: {

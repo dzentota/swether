@@ -4,13 +4,11 @@
 </head>
 <body>
 <h1>Swether</h1>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-    var socket = io('http://localhost:3000');
-    socket.on('news', function (data) {
-        console.log(data);
-        socket.emit('my other event', { my: 'data' });
-    });
-</script>
+<p>My wallet: <span id="wallet"></span> <span id="balance"></span> </p>
+<p>Transactions</p>
+
+<ul id="transactions"></ul>
+<script src="http://swether.dev:8080/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
 </body>
 </html>
