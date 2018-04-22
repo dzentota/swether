@@ -1,12 +1,18 @@
 <html>
 <head>
     <title>Swether</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 <h1>Swether</h1>
 <p>My wallet: <span id="wallet"></span></p>
-<p>Balance: <span id="balance"></span> </p>
+<p>Off-chain Balance: <span id="swether"></span> </p>
+<p>Onn-chain Balance: <span id="ether"></span> </p>
 <p>Transactions</p>
+
+<input type="text" id="depositAmount" placeholder="AMOUNT"/> <button id="btnDeposit">Deposit</button><br>
+<input type="text" id="transferAmount" placeholder="AMOUNT"/> <input type="text" id="recipient" value="" placeholder="RECIPIENT"><button onclick="transfer()">Transfer</button><br>
+<input type="text" id="withdrawAmount" placeholder="AMOUNT"/> <button onclick="withdraw()">Withdraw</button><br>
 
 <ul id="transactions"></ul>
 <script src="http://swether.dev:8080/socket.io/socket.io.js"></script>

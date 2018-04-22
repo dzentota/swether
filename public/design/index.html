@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)https://wallet.liquidity.network/ -->
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Swether</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<link href="./src/bootstrap.min.css" rel="stylesheet">
+<link href="./src/main.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<div  id="wrapper">
+  <div  id="page-content-wrapper">
+    <div  class="container-fluid">
+      <div  class="row">
+        
+        <div  class="col-lg-1 col-xl-2"></div>
+
+        
+        <div  class="col-12 col-lg-10 col-xl-8 background-plane">
+          
+          <div  class="row">
+            
+            <div  class="col-md-3 col-xl-4"></div>
+            
+            <div  class="col-12 col-md-6 col-xl-4">
+              <img  id="logo" src="src/logo.png"> <br ><br><br ><br >
+            </div>
+            
+            <div  class="col-md-3 col-xl-4"></div>
+          </div>
+
+          
+         <div  class="row">
+  <div  class="col-12">
+    
+    <!---->
+    
+    <!---->
+  </div>
+</div>
+
+
+          
+          <!----><!---->
+            
+            <div  class="container-fluid">
+  <div  class="form-group">
+    <label  for="ether_wallet" style="font-weight: bold;">Wallet</label><br _ngcontent-c2=""><br _ngcontent-c2="">
+    <div  class="select_border">
+	    <select  class="form-control ng-pristine ng-valid ng-touched" id="ether_wallet">
+	      <!----><option  value="0: 0" id="wallet">
+	        -
+	      </option>
+	    </select>
+	  </div>
+  </div>
+</div>
+
+
+            
+            <!----><div  class="container-fluid">
+              
+
+
+<br >
+
+
+  
+  <!----><!---->
+    <div  class="row">
+      <div  class="col-12 col-lg-12">
+        
+        
+        
+        <div class="container-fluid" style="text-align: center;">
+
+
+        <br ><br >
+        
+        <div  class="container-fluid" style="text-align: center;">
+  <div  class="row">
+    <div  class="col-12" style="font-weight: bold;">
+      Balance
+    </div>
+  </div>
+  <br >
+  <div  class="row">
+    <div  class="col-2"></div>
+    <div  class="col-4" style="color: rgba(98, 106, 154, 1); font-weight: bold;">
+      <span id="ether">-</span>
+      <p >
+        On-chain
+      </p>
+    </div>
+    <div  class="col-4" style="color: rgba(125, 125, 125, 1); font-weight: bold;">
+      <span id="swether">-</span>
+      <p >
+        Off-chain
+      </p>
+    </div>
+  </div>
+  <br>
+
+</div>
+
+        <br >
+        
+        <div  class="container-fluid">
+  <div  class="row">
+    <div  class="col-12">
+      <form  onsubmit="return false" novalidate="" class="ng-untouched ng-pristine ng-valid">
+        <div  class="input-group">
+          
+          <div  class="input-group input-group-sm margin-bottom-button">
+            <span  class="input-group-addon">
+              Ξ
+            </span>
+            <input  class="form-control details__Input ng-untouched ng-pristine ng-valid" id="depositAmount" min="0" name="depAmount" step="1" type="number" max="1129979000000000000" placeholder="Max: 1 eth 129 fny 979 sbo">
+          </div>
+        </div>
+        <div  class="input-group input-group-block">
+          
+
+        <button  class="button button_light centered_element" id="btnDeposit">
+          <span  class="button__back"></span>
+          <span  class="button__text">Deposit</span>
+        </button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+        <br ><br >
+        
+        <div  class="container-fluid">
+  <div  class="row">
+    <div  class="col-12">
+      <!---->
+        <form  onsubmit="return false" novalidate="" class="ng-untouched ng-pristine ng-valid">
+          
+          <div  class="input-group input-group-sm" style="margin-bottom: 2pt">
+            <span  class="input-group-addon">
+              &gt;
+            </span>
+            <input  class="form-control details__Input ng-untouched ng-pristine ng-valid"  id="recipient" name="txTo" placeholder="Recipient Address" type="text">
+          </div>
+
+          
+          <div  class="input-group input-group-sm margin-bottom-button">
+            <span  class="input-group-addon">
+              Ξ
+            </span>
+            <input  class="form-control details__Input ng-untouched ng-pristine ng-valid" min="0" id="transferAmount" name="txAmount" step="1" type="number" max="0" placeholder="Max: 0 wei">
+          </div>
+
+        <div  class="input-group input-group-block">
+
+          <button  class="button button_light centered_element" >
+            <span  class="button__back"></span>
+            <!----><span  class="button__text">Transfer</span>
+            <!---->
+          </button>
+        </div>
+
+        </form>
+      
+
+   </div>
+  </div>
+</div>
+
+        <br ><br >
+        
+        <div  class="container-fluid">
+  <div  class="row">
+    <div  class="col-12">
+      <form onsubmit="return false" novalidate="" class="ng-untouched ng-pristine ng-valid">
+        <!----><!---->
+          <div  class="input-group">
+            
+            <div  class="input-group input-group-sm margin-bottom-button">
+            <span  class="input-group-addon">
+              Ξ
+            </span>
+              <input  class="form-control details__Input ng-untouched ng-pristine ng-valid" id="withdrawalAmount" min="0" name="withdrawalAmount" step="1" type="number" max="0" placeholder="Max: 0 wei">
+            </div>
+            
+              
+              
+            
+
+          </div>
+          <div  class="input-group input-group-block">
+
+          <button  class="button button_light centered_element" >
+            <span  class="button__back"></span>
+            <!----><span  class="button__text">Withdraw</span>
+            <!---->
+          </button>
+        </div>
+        
+        <!---->
+
+        <!---->
+      </form>
+    </div>
+  </div>
+</div>
+
+        <br><br>
+        
+        
+      </div>
+
+    </div>
+  
+
+
+            </div>
+          
+
+          
+          
+        </div>
+
+        
+        <div class="col-lg-1 col-xl-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  <script src="http://swether.dev:8080/socket.io/socket.io.js"></script>
+  <script src="/js/index.js"></script>
+
+</body></html>
